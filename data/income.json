@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "51c6e3a4-aac0-4d3c-82ae-8a6d8f0d8b73",
+    "amount": 1368.0,
+    "date": "2025-07-01",
+    "type": "one_time",
+    "category": "Salary",
+    "notes": "",
+    "importance": 5
+  }
+]

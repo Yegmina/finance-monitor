@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
+import calendar
 
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
 
@@ -44,6 +45,11 @@ DEFAULT_DATA_TEMPLATE = {
             "Transport": ["Season ticket"],
             "Utilities": ["Electricity", "Internet"],
         },
+        "invest": {
+            "Crypto": ["Deposit to Bybit"],
+            "AeroRozum": ["Self-funding"],
+            "Saving": ["Long-time fiat saving", "Bank deposit"],
+        },
     },
     "destinations": {
         "Pizza": ["Dominos", "Pizza Hut"],
@@ -62,7 +68,12 @@ DEFAULT_DATA_TEMPLATE = {
 }
 
 def load_defaults():
-    return load_json(DEFAULTS_FILE, DEFAULT_DATA_TEMPLATE)
+    data = load_json(DEFAULTS_FILE, DEFAULT_DATA_TEMPLATE)
+    # migrate: ensure invest categories present
+    if "invest" not in data["categories"]:
+        data["categories"]["invest"] = DEFAULT_DATA_TEMPLATE["categories"]["invest"]
+        save_defaults(data)
+    return data
 
 def save_defaults(data):
     save_json(DEFAULTS_FILE, data)
@@ -111,7 +122,11 @@ def index():
     income = load_income()
     spendings = load_spendings()
     total_income = sum(item["amount"] for item in income)
-    total_spendings = sum(item["amount"] for item in spendings)
+    investings = [s for s in spendings if s["type"] == "invest"]
+    expenditures = [s for s in spendings if s["type"] != "invest"]
+
+    total_invest = sum(i["amount"] for i in investings)
+    total_spendings = sum(s["amount"] for s in expenditures)
     balance = total_income - total_spendings
     return render_template(
         "index.html",
@@ -119,6 +134,7 @@ def index():
         spendings=spendings,
         total_income=total_income,
         total_spendings=total_spendings,
+        total_invest=total_invest,
         balance=balance,
     )
 
@@ -326,6 +342,85 @@ def delete_subsub(subcategory, subsub):
         save_defaults(defaults)
         flash("Sub-subcategory removed.")
     return redirect(url_for("admin"))
+
+# ---- Statistics ------------------------------------------------------------
+
+def _filter_records_by_date(records, start_date, end_date):
+    return [r for r in records if start_date <= datetime.strptime(r["date"], "%Y-%m-%d").date() <= end_date]
+
+@app.route("/stats")
+def stats():
+    # date range params
+    today = datetime.today().date()
+    year_param = request.args.get("year")
+    month_param = request.args.get("month")
+    start_str = request.args.get("start")
+    end_str = request.args.get("end")
+
+    if start_str and end_str:
+        start_date = datetime.strptime(start_str, "%Y-%m-%d").date()
+        end_date = datetime.strptime(end_str, "%Y-%m-%d").date()
+        current_year = start_date.year
+    elif year_param and month_param:
+        year = int(year_param)
+        month = int(month_param)
+        start_date = datetime(year, month, 1).date()
+        end_date = datetime(year, month, calendar.monthrange(year, month)[1]).date()
+        current_year = year
+    elif year_param:
+        year = int(year_param)
+        start_date = datetime(year, 1, 1).date()
+        end_date = datetime(year, 12, 31).date()
+        current_year = year
+    else:
+        start_date = today.replace(day=1)
+        end_date = today
+        current_year = today.year
+
+    income = _filter_records_by_date(load_income(), start_date, end_date)
+    spendings = _filter_records_by_date(load_spendings(), start_date, end_date)
+
+    total_income = sum(i["amount"] for i in income)
+    investings = [s for s in spendings if s["type"] == "invest"]
+    expenditures = [s for s in spendings if s["type"] != "invest"]
+
+    total_invest = sum(i["amount"] for i in investings)
+    total_spendings = sum(s["amount"] for s in expenditures)
+
+    # category aggregation (exclude investments)
+    category_totals = {}
+    for s in expenditures:
+        cat = s["category"]
+        category_totals.setdefault(cat, 0)
+        category_totals[cat] += s["amount"]
+
+    top_categories = sorted(category_totals.items(), key=lambda x: x[1], reverse=True)[:5]
+
+    # per category details
+    per_category = {}
+    for s in spendings:
+        per_category.setdefault(s["category"], []).append(s)
+
+    # top non-important spendings (importance 1 or 2)
+    non_imp = [s for s in spendings if s.get("importance", 3) <= 2]
+    non_imp_sorted = sorted(non_imp, key=lambda x: x["amount"], reverse=True)[:10]
+
+    months = [(m, calendar.month_name[m]) for m in range(1, 13)]
+
+    return render_template(
+        "stats.html",
+        start_date=start_date,
+        end_date=end_date,
+        total_income=total_income,
+        total_spendings=total_spendings,
+        total_invest=total_invest,
+        balance=total_income - total_spendings,
+        top_categories=top_categories,
+        per_category=per_category,
+        non_imp=non_imp_sorted,
+        months=months,
+        current_year=current_year,
+    )
 
 # -----------------------------------------------------------------------------
 

@@ -12,15 +12,49 @@
     "date": "2025-07-04"
   },
   {
-    "id": "b2e53519-a848-45b1-bc97-c8e3f088859a",
+    "id": "3e886294-d2a5-40b7-aa96-71a73b1f1f0d",
     "type": "one_time",
-    "category": "Transport",
+    "category": "Food",
     "subcategories": [
-      "HSL"
+      "Market",
+      "icecream",
+      "juice"
     ],
     "subsubcategory": null,
-    "destination": "HSL",
-    "amount": 0.0,
-    "date": "2025-07-04"
+    "destination": "S-market",
+    "amount": 8.34,
+    "date": "2025-07-02",
+    "notes": "",
+    "importance": 2
+  },
+  {
+    "id": "2d2801ad-a48a-4df8-ac6a-6af235235e0e",
+    "type": "one_time",
+    "category": "Food",
+    "subcategories": [
+      "Restaurant",
+      "pelmeni"
+    ],
+    "subsubcategory": null,
+    "destination": "itakeskus restaurant UA",
+    "amount": 8.5,
+    "date": "2025-07-01",
+    "notes": "",
+    "importance": 3
+  },
+  {
+    "id": "aeb1e395-d040-4c29-8797-a3b85b8416ee",
+    "type": "one_time",
+    "category": "Food",
+    "subcategories": [
+      "Market",
+      "icecream"
+    ],
+    "subsubcategory": null,
+    "destination": "Sopilka",
+    "amount": 1.4,
+    "date": "2025-07-04",
+    "notes": "",
+    "importance": 2
   }
 ]

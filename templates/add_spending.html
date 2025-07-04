@@ -15,6 +15,7 @@
         <select class="form-select" name="spend_type" id="spend_type">
           <option value="one_time">One-time purchase</option>
           <option value="regular">Regular</option>
+          <option value="invest">Invest / Saving</option>
         </select>
       </div>
 
@@ -99,13 +100,9 @@ function refreshSubSub() {
   if (selected && selected.length === 1) {
     const sub = selected[0];
     $.getJSON(`/api/subsub/${encodeURIComponent(sub)}`, function(list) {
-      if (list.length) {
-        $('#subsub-wrap').show();
-        $('#subsubcategory').empty();
-        list.forEach(s => $('#subsubcategory').append(`<option value="${s}">${s}</option>`));
-      } else {
-        $('#subsub-wrap').hide();
-      }
+      $('#subsub-wrap').show();
+      $('#subsubcategory').empty();
+      list.forEach(s => $('#subsubcategory').append(`<option value="${s}">${s}</option>`));
     });
   } else {
     $('#subsub-wrap').hide();

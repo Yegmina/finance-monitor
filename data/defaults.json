@@ -7,7 +7,10 @@
         "Buffet",
         "Restaurant",
         "Cafe",
-        "Market"
+        "Market",
+        "icecream",
+        "juice",
+        "pelmeni"
       ],
       "Clothes": [
         "Shoes",
@@ -42,6 +45,18 @@
         "Electricity",
         "Internet"
       ]
+    },
+    "invest": {
+      "Crypto": [
+        "Deposit to Bybit"
+      ],
+      "AeroRozum": [
+        "Self-funding"
+      ],
+      "Saving": [
+        "Long-time fiat saving",
+        "Bank deposit"
+      ]
     }
   },
   "destinations": {
@@ -56,7 +71,9 @@
     "Market": [
       "K-Supermarket",
       "Lidl",
-      "R-kioski"
+      "R-kioski",
+      "S-market",
+      "Sopilka"
     ],
     "Taxi": [
       "Uber",
@@ -81,6 +98,12 @@
     ],
     "HSL": [
       "HSL"
+    ],
+    "Restaurant": [
+      "itakeskus restaurant UA"
+    ],
+    "Self-funding": [
+      "2"
     ]
   },
   "subsubcategories": {
