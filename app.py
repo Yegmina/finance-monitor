@@ -132,6 +132,8 @@ def add_income():
         raw_new_cat = request.form.get("new_income_category", "").strip()
         category = raw_new_cat if raw_new_cat else request.form.get("income_category")
         amount = float(request.form["amount"])
+        notes = request.form.get("notes", "").strip()
+        importance = int(request.form.get("importance") or 3)
         date_str = request.form.get("date") or datetime.today().strftime("%Y-%m-%d")
 
         # store entry
@@ -142,6 +144,8 @@ def add_income():
             "date": date_str,
             "type": income_type,
             "category": category,
+            "notes": notes,
+            "importance": importance,
         })
         save_income(income)
 
@@ -182,6 +186,8 @@ def add_spending():
 
         destination = request.form["destination"]
         amount = float(request.form["amount"])
+        notes = request.form.get("notes", "").strip()
+        importance = int(request.form.get("importance") or 3)
         date_str = request.form.get("date") or datetime.today().strftime("%Y-%m-%d")
 
         # update db
@@ -194,6 +200,8 @@ def add_spending():
             "destination": destination,
             "amount": amount,
             "date": date_str,
+            "notes": notes,
+            "importance": importance,
         }
         spendings = load_spendings()
         spendings.append(spending_entry)
@@ -301,7 +309,23 @@ def delete_subcategory(spend_type, category, subcat):
 @app.route("/admin")
 def admin():
     defaults = load_defaults()
-    return render_template("admin.html", categories=defaults["categories"], income_categories=defaults.get("income_categories", []))
+    return render_template(
+        "admin.html",
+        categories=defaults["categories"],
+        income_categories=defaults.get("income_categories", []),
+        subsubs=defaults.get("subsubcategories", {}),
+    )
+
+# delete sub-subcategory
+@app.route("/delete_subsub/<subcategory>/<subsub>")
+def delete_subsub(subcategory, subsub):
+    defaults = load_defaults()
+    lst = defaults.get("subsubcategories", {}).get(subcategory, [])
+    if subsub in lst:
+        lst.remove(subsub)
+        save_defaults(defaults)
+        flash("Sub-subcategory removed.")
+    return redirect(url_for("admin"))
 
 # -----------------------------------------------------------------------------
 

@@ -22,10 +22,11 @@
       "Transport": [
         "Taxi",
         "Bus ticket",
-        "Fuel"
+        "Fuel",
+        "HSL"
       ],
       "Health": [
-        "Toothes"
+        "Teeth"
       ]
     },
     "regular": {
@@ -74,6 +75,12 @@
     "Toothes": [
       "Public hospital",
       "asdf"
+    ],
+    "Teeth": [
+      "Public hospital"
+    ],
+    "HSL": [
+      "HSL"
     ]
   },
   "subsubcategories": {

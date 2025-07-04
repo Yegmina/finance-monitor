@@ -7,7 +7,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-light">
-  <div class="container py-4">
+  <div class="container py-4 animate__animated animate__fadeIn">
     <h1 class="mb-4">Add Spending</h1>
     <form method="post" id="spendingForm">
       <div class="mb-3">
@@ -22,14 +22,14 @@
         <label class="form-label">Category</label>
         <select class="form-select" name="category" id="category"></select>
         <small class="text-muted">or add new:</small>
-        <input type="text" class="form-control" name="new_category" placeholder="New category">
+        <input type="text" class="form-control" name="new_category" id="new_category" placeholder="New category">
       </div>
 
       <div class="mb-3">
         <label class="form-label">Sub-category (you can pick multiple)</label>
         <select class="form-select" name="subcategory" id="subcategory" multiple size="6"></select>
         <small class="text-muted">or add new (comma-separated for several):</small>
-        <input type="text" class="form-control" name="new_subcategory" placeholder="New subcategory">
+        <input type="text" class="form-control" name="new_subcategory" id="new_subcategory" placeholder="New subcategory">
       </div>
 
       <div id="subsub-wrap" class="mb-3" style="display:none;">
@@ -52,6 +52,17 @@
       <div class="mb-3">
         <label class="form-label">Date</label>
         <input type="date" class="form-control" name="date" id="date">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Importance (1 = fun, 5 = essential)</label>
+        <input type="range" class="form-range" min="1" max="5" step="1" name="importance" value="3" oninput="this.nextElementSibling.value=this.value">
+        <output class="ms-2">3</output>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Notes</label>
+        <textarea class="form-control" name="notes" rows="2" placeholder="Optional notes"></textarea>
       </div>
 
       <button type="submit" class="btn btn-primary">Add</button>
@@ -101,10 +112,23 @@ function refreshSubSub() {
   }
 }
 
+function toggleCatVisibility() {
+  $('#category').toggle(!$('#new_category').val());
+}
+
+function toggleSubVisibility() {
+  $('#subcategory').closest('.mb-3').find('select').toggle(!$('#new_subcategory').val());
+}
+
+$('#new_category').on('input', toggleCatVisibility);
+$('#new_subcategory').on('input', toggleSubVisibility);
+
 $(document).ready(function() {
   const today = new Date().toISOString().split('T')[0];
   $('#date').val(today);
   loadCategories();
+  toggleCatVisibility();
+  toggleSubVisibility();
 });
 
 $('#subcategory').on('change', function() {

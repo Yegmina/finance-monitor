@@ -36,9 +36,23 @@
             <div class="accordion-body">
               <ul class="list-group">
                 {% for sub in subs %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                  {{ sub }}
-                  <a href="{{ url_for('delete_subcategory', spend_type=stype, category=cat, subcat=sub) }}" class="btn btn-sm btn-outline-danger">Delete</a>
+                <li class="list-group-item">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span>{{ sub }}</span>
+                    <span>
+                      <a href="{{ url_for('delete_subcategory', spend_type=stype, category=cat, subcat=sub) }}" class="btn btn-sm btn-outline-danger">Delete Sub</a>
+                    </span>
+                  </div>
+                  {% if subsubs.get(sub) %}
+                  <ul class="list-group mt-2">
+                    {% for ss in subsubs.get(sub) %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <span class="ms-3">{{ ss }}</span>
+                      <a href="{{ url_for('delete_subsub', subcategory=sub, subsub=ss) }}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
                 </li>
                 {% endfor %}
               </ul>

@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "09bfc28a-6913-47e4-af7b-621e1008c918",
+    "type": "one_time",
+    "category": "Health",
+    "subcategories": [
+      "Teeth"
+    ],
+    "subsubcategory": null,
+    "destination": "Public hospital",
+    "amount": 55.2,
+    "date": "2025-07-04"
+  },
+  {
+    "id": "b2e53519-a848-45b1-bc97-c8e3f088859a",
+    "type": "one_time",
+    "category": "Transport",
+    "subcategories": [
+      "HSL"
+    ],
+    "subsubcategory": null,
+    "destination": "HSL",
+    "amount": 0.0,
+    "date": "2025-07-04"
+  }
+]
