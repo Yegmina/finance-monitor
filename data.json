@@ -1,0 +1,106 @@
+{
+  "income": [],
+  "spendings": [
+    {
+      "type": "one_time",
+      "category": "Food",
+      "subcategories": [
+        "Pizza"
+      ],
+      "subsubcategory": null,
+      "destination": "test",
+      "amount": 1.0,
+      "date": "2025-07-04"
+    },
+    {
+      "type": "one_time",
+      "category": "Food",
+      "subcategories": [
+        "Pizza",
+        "test"
+      ],
+      "subsubcategory": null,
+      "destination": "test",
+      "amount": 0.01,
+      "date": "2025-07-04"
+    }
+  ],
+  "categories": {
+    "one_time": {
+      "Food": [
+        "Pizza",
+        "Sushi",
+        "Buffet",
+        "Restaurant",
+        "Cafe",
+        "Market",
+        "test"
+      ],
+      "Clothes": [
+        "Shoes",
+        "Jacket",
+        "T-Shirt"
+      ],
+      "Entertainment": [
+        "Movies",
+        "Airsoft",
+        "Games"
+      ],
+      "Transport": [
+        "Taxi",
+        "Bus ticket",
+        "Fuel"
+      ]
+    },
+    "regular": {
+      "Subscription": [
+        "AI subscription",
+        "Netflix",
+        "Gym"
+      ],
+      "Transport": [
+        "Season ticket"
+      ],
+      "Utilities": [
+        "Electricity",
+        "Internet"
+      ]
+    }
+  },
+  "destinations": {
+    "Pizza": [
+      "Dominos",
+      "Pizza Hut",
+      "test"
+    ],
+    "Sushi": [
+      "Sushibar",
+      "Itsu"
+    ],
+    "Market": [
+      "K-Supermarket",
+      "Lidl",
+      "R-kioski"
+    ],
+    "Taxi": [
+      "Uber",
+      "Bolt"
+    ],
+    "Season ticket": [
+      "HSL"
+    ]
+  },
+  "subsubcategories": {
+    "HSL": [
+      "Single",
+      "Multi",
+      "Day",
+      "AB",
+      "ABC",
+      "ABCD",
+      "BC",
+      "BCD",
+      "CD"
+    ]
+  }
+}

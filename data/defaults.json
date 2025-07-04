@@ -1,0 +1,98 @@
+{
+  "categories": {
+    "one_time": {
+      "Food": [
+        "Pizza",
+        "Sushi",
+        "Buffet",
+        "Restaurant",
+        "Cafe",
+        "Market"
+      ],
+      "Clothes": [
+        "Shoes",
+        "Jacket",
+        "T-Shirt"
+      ],
+      "Entertainment": [
+        "Movies",
+        "Airsoft",
+        "Games"
+      ],
+      "Transport": [
+        "Taxi",
+        "Bus ticket",
+        "Fuel"
+      ],
+      "Health": [
+        "Toothes"
+      ]
+    },
+    "regular": {
+      "Subscription": [
+        "AI subscription",
+        "Netflix",
+        "Gym"
+      ],
+      "Transport": [
+        "Season ticket"
+      ],
+      "Utilities": [
+        "Electricity",
+        "Internet"
+      ]
+    }
+  },
+  "destinations": {
+    "Pizza": [
+      "Dominos",
+      "Pizza Hut"
+    ],
+    "Sushi": [
+      "Sushibar",
+      "Itsu"
+    ],
+    "Market": [
+      "K-Supermarket",
+      "Lidl",
+      "R-kioski"
+    ],
+    "Taxi": [
+      "Uber",
+      "Bolt"
+    ],
+    "Season ticket": [
+      "HSL"
+    ],
+    "Tooth": [
+      "Public hospital",
+      "f"
+    ],
+    "Shoes": [
+      "Public hospital"
+    ],
+    "Toothes": [
+      "Public hospital",
+      "asdf"
+    ]
+  },
+  "subsubcategories": {
+    "HSL": [
+      "Single",
+      "Multi",
+      "Day",
+      "AB",
+      "ABC",
+      "ABCD",
+      "BC",
+      "BCD",
+      "CD"
+    ]
+  },
+  "income_categories": [
+    "Salary",
+    "Gift",
+    "Award",
+    "Sales"
+  ]
+}

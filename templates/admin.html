@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin - Manage Categories</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <h1 class="mb-4">Admin – Category Manager</h1>
+    <a href="/" class="btn btn-secondary mb-3">← Back</a>
+
+    <h2>Income Categories</h2>
+    <ul class="list-group mb-4">
+      {% for ic in income_categories %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ ic }}
+        <a href="{{ url_for('delete_income_category', cat=ic) }}" class="btn btn-sm btn-outline-danger">Delete</a>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <h2>Spending Categories</h2>
+    {% for stype, cats in categories.items() %}
+      <h4 class="mt-3 text-decoration-underline">{{ stype|capitalize }}</h4>
+      <div class="accordion" id="accordion{{ stype }}">
+        {% for cat, subs in cats.items() %}
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading{{ stype }}{{ loop.index }}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ stype }}{{ loop.index }}" aria-expanded="false">
+              {{ cat }}
+            </button>
+            <a href="{{ url_for('delete_category', spend_type=stype, category=cat) }}" class="btn btn-sm btn-outline-danger ms-2">Delete category</a>
+          </h2>
+          <div id="collapse{{ stype }}{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#accordion{{ stype }}">
+            <div class="accordion-body">
+              <ul class="list-group">
+                {% for sub in subs %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  {{ sub }}
+                  <a href="{{ url_for('delete_subcategory', spend_type=stype, category=cat, subcat=sub) }}" class="btn btn-sm btn-outline-danger">Delete</a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

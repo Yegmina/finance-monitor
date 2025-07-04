@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Add Spending</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <h1 class="mb-4">Add Spending</h1>
+    <form method="post" id="spendingForm">
+      <div class="mb-3">
+        <label class="form-label">Type</label>
+        <select class="form-select" name="spend_type" id="spend_type">
+          <option value="one_time">One-time purchase</option>
+          <option value="regular">Regular</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Category</label>
+        <select class="form-select" name="category" id="category"></select>
+        <small class="text-muted">or add new:</small>
+        <input type="text" class="form-control" name="new_category" placeholder="New category">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Sub-category (you can pick multiple)</label>
+        <select class="form-select" name="subcategory" id="subcategory" multiple size="6"></select>
+        <small class="text-muted">or add new (comma-separated for several):</small>
+        <input type="text" class="form-control" name="new_subcategory" placeholder="New subcategory">
+      </div>
+
+      <div id="subsub-wrap" class="mb-3" style="display:none;">
+        <label class="form-label">Sub-subcategory</label>
+        <select class="form-select" name="subsubcategory" id="subsubcategory"></select>
+        <small class="text-muted">or add new:</small>
+        <input type="text" class="form-control" name="new_subsubcategory" placeholder="New sub-subcategory">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Destination / Store</label>
+        <input type="text" class="form-control" name="destination" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Amount (€)</label>
+        <input type="number" step="0.01" min="0" class="form-control" name="amount" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-control" name="date" id="date">
+      </div>
+
+      <button type="submit" class="btn btn-primary">Add</button>
+      <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+
+<script>
+function loadCategories() {
+  $.getJSON("{{ url_for('api_categories') }}", function(data) {
+    const type = $('#spend_type').val();
+    const cats = data[type] || {};
+    $('#category').empty();
+    Object.keys(cats).forEach(cat => {
+      $('#category').append(`<option value="${cat}">${cat}</option>`);
+    });
+    $('#category').trigger('change');
+  });
+}
+
+$('#spend_type').on('change', loadCategories);
+$('#category').on('change', function() {
+  const type = $('#spend_type').val();
+  const cat = $(this).val();
+  $.getJSON("{{ url_for('api_categories') }}", function(data) {
+    const subs = (data[type] && data[type][cat]) || [];
+    $('#subcategory').empty();
+    subs.forEach(sub => $('#subcategory').append(`<option value="${sub}">${sub}</option>`));
+  });
+});
+
+function refreshSubSub() {
+  const selected = $('#subcategory').val();
+  if (selected && selected.length === 1) {
+    const sub = selected[0];
+    $.getJSON(`/api/subsub/${encodeURIComponent(sub)}`, function(list) {
+      if (list.length) {
+        $('#subsub-wrap').show();
+        $('#subsubcategory').empty();
+        list.forEach(s => $('#subsubcategory').append(`<option value="${s}">${s}</option>`));
+      } else {
+        $('#subsub-wrap').hide();
+      }
+    });
+  } else {
+    $('#subsub-wrap').hide();
+  }
+}
+
+$(document).ready(function() {
+  const today = new Date().toISOString().split('T')[0];
+  $('#date').val(today);
+  loadCategories();
+});
+
+$('#subcategory').on('change', function() {
+  const subs = $(this).val();
+  refreshSubSub();
+  if (!subs || !subs.length) return;
+  const sub = subs[0]; // first selected for destination suggestions
+  $.getJSON(`/api/destinations/${encodeURIComponent(sub)}`, function(list) {
+    const datalistId = 'destinations-list';
+    let dl = $(`#${datalistId}`);
+    if (!dl.length) {
+      $('#spendingForm').append(`<datalist id="${datalistId}"></datalist>`);
+      dl = $(`#${datalistId}`);
+      $('[name="destination"]').attr('list', datalistId);
+    }
+    dl.empty();
+    list.forEach(d => dl.append(`<option value="${d}">`));
+  });
+});
+</script>
+</body>
+</html> 
